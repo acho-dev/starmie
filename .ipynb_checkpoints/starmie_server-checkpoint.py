@@ -190,42 +190,46 @@ class StarmieModelService:
             logger.error(f"❌ Failed to extract query vectors: {e}")
             raise
     
-    def _verify(self, table1: np.ndarray, table2: np.ndarray, threshold: float = 0.7) -> float:
-        """Compute similarity using Munkres algorithm for optimal bipartite matching (aligned with reference implementation)"""
-        score = 0.0
-        nrow = len(table1)
-        ncol = len(table2)
-        graph = np.zeros(shape=(nrow, ncol), dtype=float)
+    def _pairwise_similarity_munkres(self, query_vectors: np.ndarray, table_vectors: np.ndarray) -> float:
+        """Compute pair-wise similarity using Munkres algorithm for optimal bipartite matching"""
+        # Normalize vectors for cosine similarity
+        query_norm = np.linalg.norm(query_vectors, axis=1, keepdims=True)
+        query_normalized = query_vectors / (query_norm + 1e-8)
         
-        # Build similarity graph
-        for i in range(nrow):
-            for j in range(ncol):
-                sim = self._cosine_sim(table1[i], table2[j])
-                if sim > threshold:
-                    graph[i, j] = sim
+        table_norm = np.linalg.norm(table_vectors, axis=1, keepdims=True)
+        table_normalized = table_vectors / (table_norm + 1e-8)
         
-        # Convert to cost matrix for Munkres (maximization problem)
-        max_graph = make_cost_matrix(graph, lambda cost: (graph.max() - cost) if (cost != DISALLOWED) else DISALLOWED)
+        # Compute cosine similarity matrix
+        similarity_matrix = query_normalized @ table_normalized.T
+        
+        # Convert to cost matrix (Munkres minimizes, so use 1 - similarity)
+        cost_matrix = 1.0 - similarity_matrix
+        
+        # Create cost matrix for Munkres (handle negative costs)
+        max_cost = cost_matrix.max()
+        munkres_matrix = make_cost_matrix(cost_matrix, lambda cost: cost if cost != DISALLOWED else max_cost + 1)
         
         # Solve assignment problem
         m = Munkres()
         try:
-            indexes = m.compute(max_graph)
+            indices = m.compute(munkres_matrix)
             
             # Calculate total similarity score
-            for row, col in indexes:
-                score += graph[row, col]
+            total_similarity = 0.0
+            for row, col in indices:
+                if row < similarity_matrix.shape[0] and col < similarity_matrix.shape[1]:
+                    total_similarity += similarity_matrix[row, col]
             
-            return score
+            # Normalize by the number of pairs matched
+            if len(indices) > 0:
+                return total_similarity / len(indices)
+            else:
+                return 0.0
                 
         except Exception as e:
-            logger.warning(f"Munkres assignment failed: {e}, falling back to zero score")
-            return 0.0
-    
-    def _cosine_sim(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
-        """Compute cosine similarity between two vectors"""
-        assert vec1.ndim == vec2.ndim
-        return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+            logger.warning(f"Munkres assignment failed: {e}, falling back to max similarity")
+            # Fallback: return maximum similarity if Munkres fails
+            return float(similarity_matrix.max())
 
     def search_similar_tables(self, query_vectors: np.ndarray, top_k: int = 10, threshold: float = 0.7) -> List[Tuple[str, float]]:
         """Find similar tables using pair-wise matching with Munkres algorithm"""
@@ -252,8 +256,8 @@ class StarmieModelService:
                 if len(table_vectors.shape) == 1:
                     table_vectors = table_vectors.reshape(1, -1)
                 
-                # Compute optimal pair-wise similarity using Munkres (aligned with reference implementation)
-                similarity = self._verify(query_vectors, table_vectors, threshold)
+                # Compute optimal pair-wise similarity using Munkres
+                similarity = self._pairwise_similarity_munkres(query_vectors, table_vectors)
                 similarities.append(similarity)
             
             similarities = np.array(similarities)
