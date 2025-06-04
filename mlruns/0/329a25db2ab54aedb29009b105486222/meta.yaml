@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/329a25db2ab54aedb29009b105486222/artifacts
+end_time: 1748902073736
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 329a25db2ab54aedb29009b105486222
+run_name: stylish-finch-241
+run_uuid: 329a25db2ab54aedb29009b105486222
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748902073716
+status: 3
+tags: []
+user_id: jupyter

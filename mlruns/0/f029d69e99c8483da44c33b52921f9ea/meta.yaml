@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/f029d69e99c8483da44c33b52921f9ea/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f029d69e99c8483da44c33b52921f9ea
+run_name: languid-loon-125
+run_uuid: f029d69e99c8483da44c33b52921f9ea
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748951320101
+status: 1
+tags: []
+user_id: jupyter

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/a64aa062f0d741fdbd93512538600d6e/artifacts
+end_time: 1748984169330
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a64aa062f0d741fdbd93512538600d6e
+run_name: illustrious-croc-97
+run_uuid: a64aa062f0d741fdbd93512538600d6e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748984126704
+status: 3
+tags: []
+user_id: jupyter

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/bab8c072f309492b9a201cff7ae1b530/artifacts
+end_time: 1748921106972
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bab8c072f309492b9a201cff7ae1b530
+run_name: nervous-kit-177
+run_uuid: bab8c072f309492b9a201cff7ae1b530
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748921105633
+status: 3
+tags: []
+user_id: jupyter

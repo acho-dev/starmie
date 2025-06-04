@@ -1,2 +1,7 @@
 
 .DS_Store
+data/*
+results/*
+starmie_cache/*
+mlrun/*
+benchmark_results_*.json

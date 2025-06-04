@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/53dadb86bc3946929df189791bf4110f/artifacts
+end_time: 1748983343260
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 53dadb86bc3946929df189791bf4110f
+run_name: rumbling-horse-287
+run_uuid: 53dadb86bc3946929df189791bf4110f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748983155723
+status: 3
+tags: []
+user_id: jupyter

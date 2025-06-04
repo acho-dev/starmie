@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/2e51405e0b7343b593c03c4dacde43ff/artifacts
+end_time: 1748919293833
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2e51405e0b7343b593c03c4dacde43ff
+run_name: handsome-steed-717
+run_uuid: 2e51405e0b7343b593c03c4dacde43ff
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748918935558
+status: 3
+tags: []
+user_id: jupyter

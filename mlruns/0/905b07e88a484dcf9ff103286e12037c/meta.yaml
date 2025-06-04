@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/905b07e88a484dcf9ff103286e12037c/artifacts
+end_time: 1748998994659
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 905b07e88a484dcf9ff103286e12037c
+run_name: placid-slug-202
+run_uuid: 905b07e88a484dcf9ff103286e12037c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748998994581
+status: 3
+tags: []
+user_id: jupyter

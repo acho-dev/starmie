@@ -188,7 +188,14 @@ class PretrainTableDataset(data.Dataset):
             table = self.table_cache[table_id]
         else:
             fn = os.path.join(self.path, self.tables[table_id])
-            table = pd.read_csv(fn, lineterminator='\n')
+            print(f"📋 Loading table {table_id+1}/{len(self.tables)}: {self.tables[table_id]}")
+            try:
+                table = pd.read_csv(fn, lineterminator='\n')
+                print(f"   ✓ Loaded {len(table)} rows × {len(table.columns)} columns")
+            except pd.errors.EmptyDataError:
+                print(f"   ⚠️  Skipping empty file: {self.tables[table_id]}")
+                # Create an empty DataFrame with a single dummy column
+                table = pd.DataFrame({'dummy_column': []})
             self.table_cache[table_id] = table
 
         return table
@@ -322,9 +329,15 @@ class PretrainTableDataset(data.Dataset):
             tuple of List: the cls indices
         """
         x_ori, x_aug, cls_indices = zip(*batch)
+        
+        # Truncate sequences to max_len first
+        x_ori = [xi[:self.max_len] for xi in x_ori]
+        x_aug = [xi[:self.max_len] for xi in x_aug]
+        
         max_len_ori = max([len(x) for x in x_ori])
         max_len_aug = max([len(x) for x in x_aug])
-        maxlen = max(max_len_ori, max_len_aug)
+        maxlen = min(max(max_len_ori, max_len_aug), self.max_len)
+        
         x_ori_new = [xi + [self.tokenizer.pad_token_id]*(maxlen - len(xi)) for xi in x_ori]
         x_aug_new = [xi + [self.tokenizer.pad_token_id]*(maxlen - len(xi)) for xi in x_aug]
 
@@ -336,7 +349,9 @@ class PretrainTableDataset(data.Dataset):
             cls_aug.append([])
 
             for idx1, idx2 in item:
-                cls_ori[-1].append(idx1)
-                cls_aug[-1].append(idx2)
+                # Only include cls indices that are within the truncated sequence
+                if idx1 < maxlen and idx2 < maxlen:
+                    cls_ori[-1].append(idx1)
+                    cls_aug[-1].append(idx2)
 
         return torch.LongTensor(x_ori_new), torch.LongTensor(x_aug_new), (cls_ori, cls_aug)

@@ -127,9 +127,20 @@ if __name__ == '__main__':
     print("10th percentile: ", np.percentile(query_times, 10), " 90th percentile: ", np.percentile(query_times, 90))
     print("--- Total Query Time: %s seconds ---" % (time.time() - start_time))
 
-    # santosLarge and WDC benchmarks are used for efficiency
-    if hp.benchmark == 'santosLarge' or hp.benchmark == 'wdc':
+    # santosLarge, WDC, demo and custom benchmarks are used for efficiency
+    if hp.benchmark in ['santosLarge', 'wdc', 'demo'] or not hp.benchmark.startswith(('santos', 'tus')):
         print("No groundtruth for %s benchmark" % (hp.benchmark))
+        
+        # Print actual search results for custom benchmarks
+        if returnedResults:
+            print("\n🎯 Search Results:")
+            print("=" * 50)
+            for query_name, results in returnedResults.items():
+                print(f"\nQuery: {query_name}")
+                for i, result in enumerate(results[:hp.K], 1):
+                    print(f"  {i}. {result}")
+                if not results:
+                    print("  No results found above threshold")
     else:
         # Calculating effectiveness scores (Change the paths to where the ground truths are stored)
         if 'santos' in hp.benchmark:

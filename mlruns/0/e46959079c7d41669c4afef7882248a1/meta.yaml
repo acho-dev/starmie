@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/e46959079c7d41669c4afef7882248a1/artifacts
+end_time: 1748989071429
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e46959079c7d41669c4afef7882248a1
+run_name: gifted-turtle-167
+run_uuid: e46959079c7d41669c4afef7882248a1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748989070047
+status: 3
+tags: []
+user_id: jupyter

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/1d217658093e4e3786d63a198cda8f33/artifacts
+end_time: 1748990338713
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1d217658093e4e3786d63a198cda8f33
+run_name: bittersweet-newt-236
+run_uuid: 1d217658093e4e3786d63a198cda8f33
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748990337351
+status: 3
+tags: []
+user_id: jupyter

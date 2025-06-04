@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/4c4864d8900440de871a0d98c45dbd0a/artifacts
+end_time: 1748980956190
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4c4864d8900440de871a0d98c45dbd0a
+run_name: fun-midge-701
+run_uuid: 4c4864d8900440de871a0d98c45dbd0a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748980761906
+status: 3
+tags: []
+user_id: jupyter

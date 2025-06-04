@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/1349a3ee8fb3441292b720ae800b3cd2/artifacts
+end_time: 1748980525356
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1349a3ee8fb3441292b720ae800b3cd2
+run_name: welcoming-crab-710
+run_uuid: 1349a3ee8fb3441292b720ae800b3cd2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748980461743
+status: 3
+tags: []
+user_id: jupyter

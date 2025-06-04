@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/529133e9f9184d3cb92a8540ab743c32/artifacts
+end_time: 1748987547211
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 529133e9f9184d3cb92a8540ab743c32
+run_name: whimsical-fox-709
+run_uuid: 529133e9f9184d3cb92a8540ab743c32
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748987547192
+status: 3
+tags: []
+user_id: jupyter

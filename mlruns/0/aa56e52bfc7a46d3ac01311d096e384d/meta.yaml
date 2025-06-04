@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/aa56e52bfc7a46d3ac01311d096e384d/artifacts
+end_time: 1748900724211
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: aa56e52bfc7a46d3ac01311d096e384d
+run_name: brawny-asp-742
+run_uuid: aa56e52bfc7a46d3ac01311d096e384d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748900724158
+status: 3
+tags: []
+user_id: jupyter

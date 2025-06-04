@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/5a8c68e5306247dfa6a92b21801c51a5/artifacts
+end_time: 1748987821857
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5a8c68e5306247dfa6a92b21801c51a5
+run_name: worried-pig-499
+run_uuid: 5a8c68e5306247dfa6a92b21801c51a5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748987821836
+status: 3
+tags: []
+user_id: jupyter

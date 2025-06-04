@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/f842522985294549951cfa3c39fccdcb/artifacts
+end_time: 1748988487186
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f842522985294549951cfa3c39fccdcb
+run_name: secretive-stork-369
+run_uuid: f842522985294549951cfa3c39fccdcb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748988486735
+status: 3
+tags: []
+user_id: jupyter

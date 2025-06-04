@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/c25df21df84c4df89f88dcb92576a62d/artifacts
+end_time: 1748991018594
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c25df21df84c4df89f88dcb92576a62d
+run_name: nebulous-ant-67
+run_uuid: c25df21df84c4df89f88dcb92576a62d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748991018439
+status: 3
+tags: []
+user_id: jupyter

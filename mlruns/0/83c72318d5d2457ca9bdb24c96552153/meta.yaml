@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/83c72318d5d2457ca9bdb24c96552153/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 83c72318d5d2457ca9bdb24c96552153
+run_name: abundant-eel-745
+run_uuid: 83c72318d5d2457ca9bdb24c96552153
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748919829245
+status: 1
+tags: []
+user_id: jupyter

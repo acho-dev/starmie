@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/0caef165c3ec4a57b707d436d9cba938/artifacts
+end_time: 1748900968012
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0caef165c3ec4a57b707d436d9cba938
+run_name: learned-fawn-161
+run_uuid: 0caef165c3ec4a57b707d436d9cba938
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748900967856
+status: 3
+tags: []
+user_id: jupyter

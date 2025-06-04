@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/e27d01aff42e435d97790c1936488ea2/artifacts
+end_time: 1748990477493
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e27d01aff42e435d97790c1936488ea2
+run_name: honorable-jay-796
+run_uuid: e27d01aff42e435d97790c1936488ea2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748990476128
+status: 3
+tags: []
+user_id: jupyter

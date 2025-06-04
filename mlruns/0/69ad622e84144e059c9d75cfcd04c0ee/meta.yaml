@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/69ad622e84144e059c9d75cfcd04c0ee/artifacts
+end_time: 1748986210728
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 69ad622e84144e059c9d75cfcd04c0ee
+run_name: nervous-shad-814
+run_uuid: 69ad622e84144e059c9d75cfcd04c0ee
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748986023277
+status: 3
+tags: []
+user_id: jupyter

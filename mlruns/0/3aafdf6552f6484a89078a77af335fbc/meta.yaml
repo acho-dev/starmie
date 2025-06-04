@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/3aafdf6552f6484a89078a77af335fbc/artifacts
+end_time: 1748915414012
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3aafdf6552f6484a89078a77af335fbc
+run_name: bouncy-gnu-331
+run_uuid: 3aafdf6552f6484a89078a77af335fbc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748915412704
+status: 3
+tags: []
+user_id: jupyter

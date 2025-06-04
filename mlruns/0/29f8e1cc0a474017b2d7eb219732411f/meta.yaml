@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/29f8e1cc0a474017b2d7eb219732411f/artifacts
+end_time: 1748978201380
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 29f8e1cc0a474017b2d7eb219732411f
+run_name: thoughtful-ray-434
+run_uuid: 29f8e1cc0a474017b2d7eb219732411f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748978199507
+status: 3
+tags: []
+user_id: jupyter

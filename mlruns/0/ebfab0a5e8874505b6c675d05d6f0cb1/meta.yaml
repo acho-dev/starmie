@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/ebfab0a5e8874505b6c675d05d6f0cb1/artifacts
+end_time: 1748902130677
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ebfab0a5e8874505b6c675d05d6f0cb1
+run_name: bold-worm-168
+run_uuid: ebfab0a5e8874505b6c675d05d6f0cb1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748902130657
+status: 3
+tags: []
+user_id: jupyter

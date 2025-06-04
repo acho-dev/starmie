@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/52a3ed50bbef4561a68efbffa400705b/artifacts
+end_time: 1748981687000
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 52a3ed50bbef4561a68efbffa400705b
+run_name: rumbling-flea-375
+run_uuid: 52a3ed50bbef4561a68efbffa400705b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748981500618
+status: 3
+tags: []
+user_id: jupyter

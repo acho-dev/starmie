@@ -26,9 +26,14 @@ def extractVectors(dfs, dataFolder, augment, sample, table_order, run_id, single
         model_path = "results/%s/model_%s_%s_%s_%dsingleCol.pt" % (dataFolder, augment, sample, table_order,run_id)
     else:
         model_path = "results/%s/model_%s_%s_%s_%d.pt" % (dataFolder, augment, sample, table_order,run_id)
-    ckpt = torch.load(model_path, map_location=torch.device('cuda'))
+    try:
+        # Try with weights_only parameter for newer PyTorch versions
+        ckpt = torch.load(model_path, map_location=torch.device('cuda'), weights_only=False)
+    except TypeError:
+        # Fallback for older PyTorch versions that don't support weights_only
+        ckpt = torch.load(model_path, map_location=torch.device('cuda'))
     # load_checkpoint from sdd/pretain
-    model, trainset = load_checkpoint(ckpt)
+    model, trainset = load_checkpoint(ckpt, current_dataset=dataFolder)
     return inference_on_tables(dfs, model, trainset, batch_size=1024)
 
 def get_df(dataFolder):
@@ -41,12 +46,16 @@ def get_df(dataFolder):
     dataFiles = glob.glob(dataFolder+"/*.csv")
     dataDFs = {}
     for file in dataFiles:
-        df = pd.read_csv(file,lineterminator='\n')
-        if len(df) > 1000:
-            # get first 1000 rows
-            df = df.head(1000)
-        filename = file.split("/")[-1]
-        dataDFs[filename] = df
+        try:
+            df = pd.read_csv(file,lineterminator='\n')
+            if len(df) > 1000:
+                # get first 1000 rows
+                df = df.head(1000)
+            filename = file.split("/")[-1]
+            dataDFs[filename] = df
+        except pd.errors.EmptyDataError:
+            print(f"   ⚠️  Skipping empty file: {file}")
+            continue
     return dataDFs
 
 
@@ -75,9 +84,18 @@ if __name__ == '__main__':
     elif dataFolder == 'tus':
         ao = 'drop_cell'
         sm = 'alphaHead'
-    else: # dataFolder = tusLarge
-        ao = 'drop_cell'
-        sm = 'tfidf_entity'
+    elif dataFolder == 'demo':
+        ao = 'drop_col'
+        sm = 'head'
+    else: # dataFolder = tusLarge or custom datasets
+        # Check if this is a known benchmark, otherwise use demo-like parameters
+        if dataFolder in ['tusLarge']:
+            ao = 'drop_cell'
+            sm = 'tfidf_entity'
+        else:
+            # For custom datasets (including dataset_* and other custom names), use demo parameters
+            ao = 'drop_col'
+            sm = 'head'
 
     run_id = hp.run_id
     table_order = hp.table_order
@@ -99,6 +117,29 @@ if __name__ == '__main__':
     elif dataFolder == 'wdc':
         DATAPATH = {'query': 'data/wdc/query', 'benchmark': 'data/wdc/0/'}
         dataDir = ['query', 'benchmark']
+    elif dataFolder == 'demo':
+        DATAPATH = 'data/demo/'
+        dataDir = ['query', 'datalake']
+    else:
+        # Handle dataset IDs like dataset_1569749328695144677
+        DATAPATH = f'data/{dataFolder}/'
+        # Check if query directory has files, otherwise use tables
+        query_path = f'data/{dataFolder}/query'
+        tables_path = f'data/{dataFolder}/tables'
+        datalake_path = f'data/{dataFolder}/datalake'
+        
+        import os
+        has_query = os.path.exists(query_path) and len(os.listdir(query_path)) > 0
+        has_tables = os.path.exists(tables_path) and len(os.listdir(tables_path)) > 0
+        
+        if has_query and has_tables:
+            dataDir = ['query', 'tables']
+        elif has_query:
+            dataDir = ['query', 'datalake']
+        elif has_tables:
+            dataDir = ['tables', 'datalake']
+        else:
+            dataDir = ['datalake']
 
     inference_times = 0
     # dataDir is the query and data lake
@@ -129,6 +170,8 @@ if __name__ == '__main__':
             saveDir = 'query'
         elif dir == 'benchmark':
             saveDir = 'datalake'
+        elif dir == 'tables':
+            saveDir = 'datalake'
         else: saveDir = dir
 
         if isSingleCol:
@@ -136,6 +179,9 @@ if __name__ == '__main__':
         else:
             output_path = "data/%s/vectors/cl_%s_%s_%s_%s_%d.pkl" % (dataFolder, saveDir, ao, sm, table_order, run_id)
         if hp.save_model:
+            # Create vectors directory if it doesn't exist
+            import os
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
             pickle.dump(dataEmbeds, open(output_path, "wb"))
         print("Benchmark: ", dataFolder)
         print("--- Total Inference Time: %s seconds ---" % (inference_times))

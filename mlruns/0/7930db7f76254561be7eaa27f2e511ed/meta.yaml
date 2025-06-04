@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/7930db7f76254561be7eaa27f2e511ed/artifacts
+end_time: 1748994967357
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7930db7f76254561be7eaa27f2e511ed
+run_name: big-conch-212
+run_uuid: 7930db7f76254561be7eaa27f2e511ed
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748994967279
+status: 3
+tags: []
+user_id: jupyter

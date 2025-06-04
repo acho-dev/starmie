@@ -11,10 +11,16 @@ import os
 from .utils import evaluate_column_matching, evaluate_clustering
 from .model import BarlowTwinsSimCLR
 from .dataset import PretrainTableDataset
+from .training_monitor import DataLoadingMonitor
+import time
 
 from tqdm import tqdm
 from torch.utils import data
-from transformers import AdamW, get_linear_schedule_with_warmup
+try:
+    from transformers import AdamW, get_linear_schedule_with_warmup
+except ImportError:
+    from torch.optim import AdamW
+    from transformers import get_linear_schedule_with_warmup
 from typing import List
 
 
@@ -32,25 +38,45 @@ def train_step(train_iter, model, optimizer, scheduler, scaler, hp):
     Returns:
         None
     """
+    accumulate_grad_batches = getattr(hp, 'accumulate_grad_batches', 1)
+    monitor = DataLoadingMonitor()
+    monitor.start_monitoring()
+    
     for i, batch in enumerate(train_iter):
+        batch_start_time = time.time()
         x_ori, x_aug, cls_indices = batch
-        optimizer.zero_grad()
+        data_load_time = time.time() - batch_start_time
 
+        gpu_start_time = time.time()
         if hp.fp16:
             with torch.cuda.amp.autocast():
                 loss = model(x_ori, x_aug, cls_indices, mode='simclr')
+                loss = loss / accumulate_grad_batches
                 scaler.scale(loss).backward()
-                scaler.step(optimizer)
-                scaler.update()
         else:
             loss = model(x_ori, x_aug, cls_indices, mode='simclr')
+            loss = loss / accumulate_grad_batches
             loss.backward()
-            optimizer.step()
 
-        scheduler.step()
+        if (i + 1) % accumulate_grad_batches == 0:
+            if hp.fp16:
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                optimizer.step()
+            optimizer.zero_grad()
+            scheduler.step()
+
+        gpu_time = time.time() - gpu_start_time
+        
         if i % 10 == 0: # monitoring
-            print(f"step: {i}, loss: {loss.item()}")
+            print(f"🚂 Step {i:4d} | Loss: {(loss.item() * accumulate_grad_batches):7.4f} | "
+                  f"Data: {data_load_time*1000:5.1f}ms | GPU: {gpu_time*1000:5.1f}ms")
+        
+        monitor.batch_loaded()
         del loss
+    
+    monitor.print_summary()
 
 
 def train(trainset, hp):
@@ -64,11 +90,14 @@ def train(trainset, hp):
         The pre-trained table model
     """
     padder = trainset.pad
-    # create the DataLoaders
+    # create the DataLoaders with prefetching
     train_iter = data.DataLoader(dataset=trainset,
                                  batch_size=hp.batch_size,
                                  shuffle=True,
-                                 num_workers=0,
+                                 num_workers=8,
+                                 pin_memory=True,
+                                 persistent_workers=True,
+                                 prefetch_factor=4,  # Prefetch 4 batches per worker
                                  collate_fn=padder)
 
     # initialize model, optimizer, and LR scheduler
@@ -81,7 +110,8 @@ def train(trainset, hp):
     else:
         scaler = None
 
-    num_steps = (len(trainset) // hp.batch_size) * hp.n_epochs
+    accumulate_grad_batches = getattr(hp, 'accumulate_grad_batches', 1)
+    num_steps = (len(trainset) // (hp.batch_size * accumulate_grad_batches)) * hp.n_epochs
     scheduler = get_linear_schedule_with_warmup(optimizer,
                                                 num_warmup_steps=0,
                                                 num_training_steps=num_steps)
@@ -175,11 +205,12 @@ def inference_on_tables(tables: List[pd.DataFrame],
     return results
 
 
-def load_checkpoint(ckpt):
+def load_checkpoint(ckpt, current_dataset=None):
     """Load a model from a checkpoint.
         ** If you would like to run your own benchmark, update the ds_path here
     Args:
         ckpt (str): the model checkpoint.
+        current_dataset (str): the current dataset being processed (overrides hp.task)
 
     Returns:
         BarlowTwinsSimCLR: the pre-trained model
@@ -191,19 +222,45 @@ def load_checkpoint(ckpt):
     print(device)
     model = BarlowTwinsSimCLR(hp, device=device, lm=hp.lm)
     model = model.to(device)
-    model.load_state_dict(ckpt['model'])
+    model.load_state_dict(ckpt['model'], strict=False)
 
     # dataset paths, depending on benchmark for the current task
+    # Use current_dataset if provided, otherwise use saved hp.task
+    task_name = current_dataset if current_dataset else hp.task
+    
     ds_path = 'data/santos/datalake'
-    if hp.task == "santosLarge":
+    if task_name == "santosLarge":
         # Change the data paths to where the benchmarks are stored
         ds_path = 'data/santos-benchmark/real-benchmark/datalake'
-    elif hp.task == "tus":
+    elif task_name == "tus":
         ds_path = 'data/table-union-search-benchmark/small/benchmark'
-    elif hp.task == "tusLarge":
+    elif task_name == "tusLarge":
         ds_path = 'data/table-union-search-benchmark/large/benchmark'
-    elif hp.task == "wdc":
+    elif task_name == "wdc":
         ds_path = 'data/wdc/0'
+    elif task_name == "demo":
+        ds_path = 'data/demo/datalake'
+    elif task_name.startswith("dataset_"):
+        # Handle custom dataset IDs
+        import os
+        base_path = f'data/{task_name}'
+        if os.path.exists(f'{base_path}/datalake'):
+            ds_path = f'{base_path}/datalake'
+        elif os.path.exists(f'{base_path}/tables'):
+            ds_path = f'{base_path}/tables'
+        else:
+            ds_path = base_path
+    else:
+        # Handle other custom datasets (like 'tcb')
+        import os
+        base_path = f'data/{task_name}'
+        if os.path.exists(f'{base_path}/datalake'):
+            ds_path = f'{base_path}/datalake'
+        elif os.path.exists(f'{base_path}/tables'):
+            ds_path = f'{base_path}/tables'
+        else:
+            # If no custom dataset found, keep the default
+            ds_path = 'data/santos/datalake'
     dataset = PretrainTableDataset.from_hp(ds_path, hp)
 
     return model, dataset

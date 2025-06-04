@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/b66c959f09564f39bfecfe5d18e9145d/artifacts
+end_time: 1748918919416
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b66c959f09564f39bfecfe5d18e9145d
+run_name: rogue-snake-892
+run_uuid: b66c959f09564f39bfecfe5d18e9145d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748918817160
+status: 3
+tags: []
+user_id: jupyter

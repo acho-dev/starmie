@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/10f0ac49f9004a97b84278fa9397c200/artifacts
+end_time: 1748993242943
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 10f0ac49f9004a97b84278fa9397c200
+run_name: nimble-shrimp-727
+run_uuid: 10f0ac49f9004a97b84278fa9397c200
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748993242866
+status: 3
+tags: []
+user_id: jupyter

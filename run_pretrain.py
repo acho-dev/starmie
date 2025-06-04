@@ -12,11 +12,12 @@ if __name__ == '__main__':
     parser.add_argument("--task", type=str, default="small")
     parser.add_argument("--logdir", type=str, default="results/")
     parser.add_argument("--run_id", type=int, default=0)
-    parser.add_argument("--batch_size", type=int, default=32)
+    parser.add_argument("--batch_size", type=int, default=128)
     parser.add_argument("--max_len", type=int, default=128)
     parser.add_argument("--size", type=int, default=10000)
     parser.add_argument("--lr", type=float, default=5e-5)
     parser.add_argument("--n_epochs", type=int, default=20)
+    parser.add_argument("--accumulate_grad_batches", type=int, default=1)
     parser.add_argument("--lm", type=str, default='roberta')
     parser.add_argument("--projector", type=int, default=768)
     parser.add_argument("--augment_op", type=str, default='drop_col,sample_row')
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     hp = parser.parse_args()
 
     # mlflow logging
-    for variable in ["task", "batch_size", "lr", "n_epochs", "augment_op", "sample_meth", "table_order"]:
+    for variable in ["task", "batch_size", "lr", "n_epochs", "augment_op", "sample_meth", "table_order", "accumulate_grad_batches"]:
         mlflow.log_param(variable, getattr(hp, variable))
 
     if hp.mlflow_tag:
@@ -57,9 +58,18 @@ if __name__ == '__main__':
         path = 'data/table-union-search-benchmark/small/benchmark'
         if hp.task == "tusLarge":
             path = 'data/table-union-search-benchmark/large/benchmark'
-
+    elif hp.task == "demo":
+        path = 'data/demo/datalake'
     else:
-        path = 'data/%s/tables' % hp.task
+        # For custom datasets, check which directory exists
+        import os
+        base_path = f'data/{hp.task}'
+        if os.path.exists(f'{base_path}/datalake'):
+            path = f'{base_path}/datalake'
+        elif os.path.exists(f'{base_path}/tables'):
+            path = f'{base_path}/tables'
+        else:
+            path = f'{base_path}/tables'  # default fallback
     # trainset = PretrainTableDataset(path,
     #                      augment_op=hp.augment_op,
     #                      lm=hp.lm,

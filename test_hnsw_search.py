@@ -15,8 +15,11 @@ if __name__ == '__main__':
     parser.add_argument("--single_column", dest="single_column", action="store_true")
     parser.add_argument("--K", type=int, default=10)
     parser.add_argument("--scal", type=float, default=1.00)
+    parser.add_argument("--threshold", type=float, default=0.7)
+    parser.add_argument("--augment_op", type=str, default="drop_col")
+    parser.add_argument("--sample_meth", type=str, default="head")
+    parser.add_argument("--table_order", type=str, default="column")
     # parser.add_argument("--N", type=int, default=10)
-    # parser.add_argument("--threshold", type=float, default=0.7)
     # mlflow tag
     parser.add_argument("--mlflow_tag", type=str, default=None)
 
@@ -44,6 +47,15 @@ if __name__ == '__main__':
         sampAug = "drop_cell_alphaHead"
         K = 60
         threshold = 0.1
+    elif dataFolder == 'demo':
+        sampAug = "drop_col_head"
+        K = hp.K
+        threshold = hp.threshold
+    else:
+        # Handle custom datasets - use passed parameters
+        sampAug = f"{hp.augment_op}_{hp.sample_meth}"
+        K = hp.K
+        threshold = hp.threshold
     singSampAug = "drop_cell_tfidf_entity"
 
     # If we need to change the value of N, or change the filepath to the pkl files (including indexing), change here:
@@ -86,9 +98,20 @@ if __name__ == '__main__':
     print("10th percentile: ", np.percentile(query_times, 10), " 90th percentile: ", np.percentile(query_times, 90))
     print("--- Total Query Time: %s seconds ---" % (time.time() - start_time))
 
-    # santosLarge and WDC benchmarks are used for efficiency
-    if hp.benchmark == 'santosLarge' or hp.benchmark == 'wdc':
+    # santosLarge, WDC, demo and custom benchmarks are used for efficiency
+    if hp.benchmark in ['santosLarge', 'wdc', 'demo'] or not hp.benchmark.startswith(('santos', 'tus')):
         print("No groundtruth for %s benchmark" % (hp.benchmark))
+        
+        # Print actual search results for custom benchmarks
+        if returnedResults:
+            print("\n🎯 Search Results:")
+            print("=" * 50)
+            for query_name, results in returnedResults.items():
+                print(f"\nQuery: {query_name}")
+                for i, result in enumerate(results[:hp.K], 1):
+                    print(f"  {i}. {result}")
+                if not results:
+                    print("  No results found above threshold")
     else:
         # Calculating effectiveness scores (Change the paths to where the ground truths are stored)
         if 'santos' in hp.benchmark:

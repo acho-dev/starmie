@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/977253abe7c44b378e894f0eb7bcd6ac/artifacts
+end_time: 1748985539645
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 977253abe7c44b378e894f0eb7bcd6ac
+run_name: enthused-dog-964
+run_uuid: 977253abe7c44b378e894f0eb7bcd6ac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748985352975
+status: 3
+tags: []
+user_id: jupyter

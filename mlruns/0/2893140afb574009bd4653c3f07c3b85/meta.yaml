@@ -1,0 +1,15 @@
+artifact_uri: file:///home/timothy/aden/starmie/mlruns/0/2893140afb574009bd4653c3f07c3b85/artifacts
+end_time: 1748989755115
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2893140afb574009bd4653c3f07c3b85
+run_name: auspicious-robin-857
+run_uuid: 2893140afb574009bd4653c3f07c3b85
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748989752998
+status: 3
+tags: []
+user_id: jupyter
